@@ -1,11 +1,12 @@
 NAME		= philo
 SRCDIR		= src/
-SRC			= philo.c
+SRC			= philo.c \
+				utils.c
 
 SOURCES		= $(addprefix $(SRCDIR),$(SRC))
 OBJ			= $(SOURCES:.c=.o)
 CC			= gcc
-CFLAGS		= -Iinc/ -Wall -Wextra -Werror
+CFLAGS		= -Iinclude/ -Wall -Wextra -Werror
 
 .c.o:
 			$(CC) $(CFLAGS) -g -c $< -o $(<:.c=.o)
