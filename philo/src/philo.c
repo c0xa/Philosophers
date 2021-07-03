@@ -3,15 +3,14 @@
 static int checkError(int num_argv, char **argv)
 {
 	int num = ft_atoi(argv[num_argv]);
-	printf("num = %d\n", num);
-	if (num < 1) {
-		printf("Wrong arguments %d\n", num_argv);
+	if (num < 1 || num > 200) {
+		printf("Wrong arguments %d, value = %s\n", num_argv, argv[num_argv]);
 		return -1;
 	}
 	return num;
 }
 
-static int parser(t_philo *philo, int argc, char **argv) 
+static int parser(t_value *value, int argc, char **argv) 
 {
 	int num;
 	int digit;
@@ -24,27 +23,34 @@ static int parser(t_philo *philo, int argc, char **argv)
 		if (digit == -1)
 			return (-1);
 		if (num == 1)
-			philo->number_of_philosophers = digit;
+			value->number_of_philosophers = digit;
 		else if (num == 2)
-			philo->time_to_die = digit;
+			value->time_to_die = digit;
 		else if (num == 3)
-			philo->time_to_eat = digit;
+			value->time_to_eat = digit;
 		else if (num == 4)
-			philo->time_to_sleep = digit;
+			value->time_to_sleep = digit;
 		else if (num == 5)
-			philo->number_of_times_to_eat = digit;
+			value->number_of_times_to_eat = digit;
 		num++;
 	}
 	return 0;
 }
 
+
 int main(int argc, char **argv) {
+	t_value	value;
+	t_data data;
+
 	if (argc < 5 || argc > 6)
 	{
 		printf("Wrong number of arguments\n");
 		return 0;
-	}
-	t_philo	philo;
-	parser(&philo, argc, argv);
+	}	
+	if (parser(&value, argc, argv) == -1)
+		return (0);
+	data.value = &value;
+	if (initial_main(&data) == -1)
+		return (0);
 	return 0;
 }

@@ -1,7 +1,9 @@
 NAME		= philo
 SRCDIR		= src/
 SRC			= philo.c \
-				utils.c
+				utils.c \
+				create_thread.c \
+				initial.c \
 
 SOURCES		= $(addprefix $(SRCDIR),$(SRC))
 OBJ			= $(SOURCES:.c=.o)
