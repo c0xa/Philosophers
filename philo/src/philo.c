@@ -3,7 +3,7 @@
 static int checkError(int num_argv, char **argv)
 {
 	int num = ft_atoi(argv[num_argv]);
-	if (num < 1 || num > 200) {
+	if (num < 1 || num > MAXPHILO) {
 		printf("Wrong arguments %d, value = %s\n", num_argv, argv[num_argv]);
 		return -1;
 	}

@@ -7,7 +7,6 @@ static void initial_philo(t_philo *philo, t_value *value)
 
 	i = 0;
 	count_philo = value->number_of_philosophers;
-	printf("count filo = %d", count_philo);
 	while (i < count_philo) {
 		philo[i].state = 0;
 		philo[i].time_to_die = value->time_to_die;
