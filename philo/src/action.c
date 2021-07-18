@@ -1,52 +1,66 @@
-#include "philo.h" 
+#include "philo.h"
 
-void			*philo_routine(t_data *data)
+void	do_eat(t_data *data, int id, int min_fork, int max_fork)
 {
-	t_data_info	philo_info;
-	static int		id = 1;
-	int				local_id;
-
-	pthread_mutex_lock(&data->id_mtx);
-	if (id > data->value->number_of_philosophers)
+	pthread_mutex_lock(&data->forks[min_fork]);
+	print_time(data, id, "has taken a fork");
+	if (data->value->number_of_philosophers == 1)
 	{
-		id = data->value->number_of_philosophers
-			- (data->value->number_of_philosophers % 2);
+		pthread_mutex_unlock(&data->forks[min_fork]);
+		while (data->is_alive)
+			;
+		return ;
 	}
-	local_id = id;
-	if (id % 2 == 0)
-	{
-		data->philos[id - 1].state = SLEEPING;
-		id -= 2;
-	}
-	else
-		id += 2;
-	philo_info.data = data;
-	philo_info.id = local_id;
-	act(data, philo_info);
-	return (NULL);
+	pthread_mutex_lock(&data->forks[max_fork]);
+	print_time(data, id, "has taken a fork");
+	pthread_mutex_lock(&data->ph_mtx[id - 1]);
+	data->philos[id - 1].time_to_die = data->value->time_to_die;
+	pthread_mutex_unlock(&data->ph_mtx[id - 1]);
+	print_time(data, id, "is eating");
+	ft_set_timeout(data->value->time_to_eat * 1000);
+	(data->philos[id - 1].eating_count)++;
 }
 
-
-int				start_simulation(t_data *data, int i)
+void	try_to_eat(t_data *data, int id)
 {
-	pthread_t		thread_id[MAXPHILO];
+	int	min_fork;
+	int	max_fork;
 
-	while (i < data->value->number_of_philosophers)
-	{
-		if ((pthread_create(&thread_id[i], NULL, &philo_routine, (void*)&data)) != 0)
-		{
-			print_error(0, "System error");
-			data->is_alive = 0;
-			while (i-- >= 0)
-				pthread_join(thread_id[i], NULL);
-			pthread_join(thread_id[data->value->number_of_philosophers], NULL);
-			free(thread_id);
-		}
-		i++;
+	if (data->philos[id - 1].left_fork > data->philos[id - 1].right_fork) {
+		min_fork =  data->philos[id - 1].right_fork;
+		max_fork = data->philos[id - 1].left_fork;
 	}
-	i = 0;
-	while (i < data->value->number_of_philosophers)
-		pthread_join(thread_id[i++], NULL);
-		free(thread_id);
-	return (0);
+	else {
+		min_fork =  data->philos[id - 1].left_fork;
+		max_fork = data->philos[id - 1].right_fork;
+	}
+	do_eat(data, id, min_fork, max_fork);
+	if (data->value->number_of_times_to_eat != -1
+			&& all_philosophers_ate_count_of_times(data))
+	{
+		print_time(data, -1, "all philosophers are full");
+		data->is_alive = 0;
+	}
+	pthread_mutex_unlock(&data->forks[min_fork]);
+	pthread_mutex_unlock(&data->forks[max_fork]);
+}
+
+void	do_next_action(t_data *data, int id)
+{
+	if (data->philos[id - 1].state == 1)
+	{
+		data->philos[id - 1].state = 2;
+		try_to_eat(data, id);
+	}
+	else if (data->philos[id - 1].state == 2)
+	{
+		data->philos[id - 1].state = 3;
+		print_time(data, id, "is sleeping");
+		ft_set_timeout(data->value->time_to_sleep * 1000);
+	}
+	else if (data->philos[id - 1].state == 3)
+	{
+		data->philos[id - 1].state = 1;
+		print_time(data, id, "is thinking");
+	}
 }
