@@ -9,7 +9,7 @@ void	ft_set_timeout(int sec)
 	gettimeofday(&start_time, NULL);
 	while (1)
 	{
-		ft_setTimeout(5);
+		usleep(5);
 		gettimeofday(&iteration_time, NULL);
 		sleep_time = ((iteration_time.tv_sec - start_time.tv_sec) * 1000000)
 			+ (iteration_time.tv_usec - start_time.tv_usec);
