@@ -3,10 +3,10 @@
 static int checkError(int num_argv, char **argv)
 {
 	int num = ft_atoi(argv[num_argv]);
-	if (num < 1 || num > MAXPHILO) {
-		printf("Wrong arguments %d, value = %s\n", num_argv, argv[num_argv]);
-		return -1;
-	}
+	// if (num < 1 || num > MAXPHILO) {
+	// 	printf("Wrong arguments %d, value = %s\n", num_argv, argv[num_argv]);
+	// 	return -1;
+	// }
 	return num;
 }
 
@@ -52,5 +52,5 @@ int main(int argc, char **argv) {
 	data.value = &value;
 	if (initial_main(&data) == -1)
 		return (0);
-	return 0;
+	return simulation(&data, 0);
 }

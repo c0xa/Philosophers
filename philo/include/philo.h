@@ -47,7 +47,7 @@ int				ft_atoi(const char *string);
 void 			createThread();
 int 			initial_main(t_data *data);
 void			print_time(t_data *data, int id, char *message);
-int				start_simulation(t_data *data, int i);
+int				simulation(t_data *data, int i);
 void			ft_set_timeout(int sec);
 void			do_next_action(t_data *data, int id);
 int				ate_count_of_times(t_data *data);

@@ -2,6 +2,7 @@
 
 void	do_eat(t_data *data, int id, int min_fork, int max_fork)
 {
+	printf("jopa1\n");
 	pthread_mutex_lock(&data->forks[min_fork]);
 	print_time(data, id, "has taken a fork");
 	if (data->value->number_of_philosophers == 1)
@@ -14,6 +15,7 @@ void	do_eat(t_data *data, int id, int min_fork, int max_fork)
 	pthread_mutex_lock(&data->forks[max_fork]);
 	print_time(data, id, "has taken a fork");
 	pthread_mutex_lock(&data->ph_mtx[id - 1]);
+	printf("jopa2\n");
 	data->philos[id - 1].time_to_die = data->value->time_to_die;
 	pthread_mutex_unlock(&data->ph_mtx[id - 1]);
 	print_time(data, id, "is eating");
@@ -21,7 +23,7 @@ void	do_eat(t_data *data, int id, int min_fork, int max_fork)
 	(data->philos[id - 1].eating_count)++;
 }
 
-void	try_to_eat(t_data *data, int id)
+void	eat(t_data *data, int id)
 {
 	int	min_fork;
 	int	max_fork;
@@ -49,17 +51,20 @@ void	do_next_action(t_data *data, int id)
 {
 	if (data->philos[id - 1].state == 1)
 	{
+		printf("1\n");
 		data->philos[id - 1].state = 2;
-		try_to_eat(data, id);
+		eat(data, id);
 	}
 	else if (data->philos[id - 1].state == 2)
 	{
+		printf("2\n");
 		data->philos[id - 1].state = 3;
 		print_time(data, id, "is sleeping");
 		ft_set_timeout(data->value->time_to_sleep * 1000);
 	}
 	else if (data->philos[id - 1].state == 3)
 	{
+		printf("3\n");
 		data->philos[id - 1].state = 1;
 		print_time(data, id, "is thinking");
 	}
