@@ -5,7 +5,7 @@ SRC			= philo.c \
 				create_thread.c \
 				initial.c \
 				action.c \
-				main-logic.c \
+				main_logic.c \
 
 SOURCES		= $(addprefix $(SRCDIR),$(SRC))
 OBJ			= $(SOURCES:.c=.o)

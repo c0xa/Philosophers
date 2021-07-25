@@ -45,3 +45,21 @@ void	print_time(t_data *data, int id, char *message)
 		printf("%ju %d %s\n", timestamp, id, message);
 	pthread_mutex_unlock(&data->sim_mtx);
 }
+
+int		ate_count_of_times(t_data *data)
+{
+	int	i;
+	int eating_count;
+	int number_of_times_to_eat;
+
+	i = 0;
+	while (i < data->value->number_of_philosophers)
+	{
+		eating_count = data->philos[i].eating_count;
+		number_of_times_to_eat = data->value->number_of_times_to_eat;
+		if (eating_count < number_of_times_to_eat)
+			return (0);
+		i++;
+	}
+	return (1);
+}

@@ -36,7 +36,7 @@ void	try_to_eat(t_data *data, int id)
 	}
 	do_eat(data, id, min_fork, max_fork);
 	if (data->value->number_of_times_to_eat != -1
-			&& all_philosophers_ate_count_of_times(data))
+			&& ate_count_of_times(data))
 	{
 		print_time(data, -1, "all philosophers are full");
 		data->is_alive = 0;
