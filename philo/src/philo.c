@@ -3,10 +3,10 @@
 static int checkError(int num_argv, char **argv)
 {
 	int num = ft_atoi(argv[num_argv]);
-	// if (num < 1 || num > MAXPHILO) {
-	// 	printf("Wrong arguments %d, value = %s\n", num_argv, argv[num_argv]);
-	// 	return -1;
-	// }
+	if (num < 1 || (num_argv == 1 && num > MAXPHILO)) {
+		printf("Wrong arguments %d, value = %s\n", num_argv, argv[num_argv]);
+		return -1;
+	}
 	return num;
 }
 
@@ -17,6 +17,7 @@ static int parser(t_value *value, int argc, char **argv)
 
 	num = 1;
 	digit = 0;
+	value->number_of_times_to_eat = -1;
 	while (--argc > 0)
 	{
 		digit = checkError(num, argv);
@@ -40,7 +41,8 @@ static int parser(t_value *value, int argc, char **argv)
 
 int main(int argc, char **argv) {
 	t_value	value;
-	t_data data;
+	t_data	data;
+	int		ret;
 
 	if (argc < 5 || argc > 6)
 	{
@@ -52,5 +54,6 @@ int main(int argc, char **argv) {
 	data.value = &value;
 	if (initial_main(&data) == -1)
 		return (0);
-	return simulation(&data, 0);
+	ret = simulation(&data, 0);
+	return 	(ret);
 }

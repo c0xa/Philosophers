@@ -2,7 +2,6 @@ NAME		= philo
 SRCDIR		= src/
 SRC			= philo.c \
 				utils.c \
-				create_thread.c \
 				initial.c \
 				action.c \
 				main_logic.c \

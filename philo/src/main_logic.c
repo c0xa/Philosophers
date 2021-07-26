@@ -60,20 +60,21 @@ static void		act(t_data *data, t_data_info *data_info)
 		return ;
 	}
 	pthread_mutex_unlock(&data->id_mtx);
-	while (data->is_alive)
+	while (data->is_alive) 
+	{
 		do_next_action(data, data_info->id);
+	}
 	pthread_join(tid, NULL);
 }
 
-void			*philo_actions(void *arg)
+void			*philo_actions(void *data_box)
 {
 	t_data 			*data;
 	t_data_info		info;
 	static int		next_id = 1;
 	int				philo_id;
 
-	data = (t_data*)arg;
-	printf("%d\n", data->value->number_of_philosophers);
+	data = (t_data*)data_box;
 	pthread_mutex_lock(&data->id_mtx);
 	if (next_id > data->value->number_of_philosophers)
 	{
@@ -90,7 +91,6 @@ void			*philo_actions(void *arg)
 		next_id += 2;
 	info.data = data;
 	info.id = philo_id;
-	printf("%d\n", philo_id);
 	act(data, &info);
 	return (NULL);
 }
@@ -102,7 +102,7 @@ int				simulation(t_data *data, int i)
 
 	while (i < data->value->number_of_philosophers)
 	{
-		if ((pthread_create(&thread_id[i], NULL, &philo_actions, &data) != 0))
+		if ((pthread_create(&thread_id[i], NULL, &philo_actions, data) != 0))
 		{
 			printf("System error\n");
 			data->is_alive = 0;
@@ -115,5 +115,6 @@ int				simulation(t_data *data, int i)
 	i = 0;
 	while (i < data->value->number_of_philosophers)
 		pthread_join(thread_id[i++], NULL);
+
 	return (0);
 }
