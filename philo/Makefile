@@ -5,6 +5,7 @@ SRC			= philo.c \
 				initial.c \
 				action.c \
 				main_logic.c \
+				action_eat.c \
 
 SOURCES		= $(addprefix $(SRCDIR),$(SRC))
 OBJ			= $(SOURCES:.c=.o)

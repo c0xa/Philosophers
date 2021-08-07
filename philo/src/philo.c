@@ -1,19 +1,34 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tblink <tblink@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/08/07 13:58:34 by tblink            #+#    #+#             */
+/*   Updated: 2021/08/07 13:58:35 by tblink           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-static int checkError(int num_argv, char **argv)
+static int	checkError(int num_argv, char **argv)
 {
-	int num = ft_atoi(argv[num_argv]);
-	if (num < 1 || (num_argv == 1 && num > MAXPHILO)) {
+	int	num;
+
+	num = ft_atoi(argv[num_argv]);
+	if (num < 1 || (num_argv == 1 && num > MAXPHILO))
+	{
 		printf("Wrong arguments %d, value = %s\n", num_argv, argv[num_argv]);
-		return -1;
+		return (-1);
 	}
-	return num;
+	return (num);
 }
 
-static int parser(t_value *value, int argc, char **argv) 
+static int	parser(t_value *value, int argc, char **argv)
 {
-	int num;
-	int digit;
+	int	num;
+	int	digit;
 
 	num = 1;
 	digit = 0;
@@ -35,11 +50,11 @@ static int parser(t_value *value, int argc, char **argv)
 			value->number_of_times_to_eat = digit;
 		num++;
 	}
-	return 0;
+	return (0);
 }
 
-
-int main(int argc, char **argv) {
+int	main(int argc, char **argv)
+{
 	t_value	value;
 	t_data	data;
 	int		ret;
@@ -47,7 +62,7 @@ int main(int argc, char **argv) {
 	if (argc < 5 || argc > 6)
 	{
 		printf("Wrong number of arguments\n");
-		return 0;
+		return (0);
 	}	
 	if (parser(&value, argc, argv) == -1)
 		return (0);
@@ -55,5 +70,5 @@ int main(int argc, char **argv) {
 	if (initial_main(&data) == -1)
 		return (0);
 	ret = simulation(&data, 0);
-	return 	(ret);
+	return (ret);
 }

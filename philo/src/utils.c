@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tblink <tblink@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/08/07 13:58:37 by tblink            #+#    #+#             */
+/*   Updated: 2021/08/07 13:58:38 by tblink           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-int		ft_atoi(const char *string)
+int	ft_atoi(const char *string)
 {
 	unsigned long int	n;
 
@@ -19,7 +31,7 @@ int		ft_atoi(const char *string)
 		n = n * 10 + *(string++) - '0';
 	}
 	if (*string)
-		return -1;
+		return (-1);
 	return ((int)n);
 }
 
@@ -46,20 +58,30 @@ void	print_time(t_data *data, int id, char *message)
 	pthread_mutex_unlock(&data->sim_mtx);
 }
 
-int		ate_count_of_times(t_data *data)
+void	destroy_mtx(pthread_mutex_t *mtx_arr, int len, int i)
 {
-	int	i;
-	int eating_count;
-	int number_of_times_to_eat;
-
-	i = 0;
-	while (i < data->value->number_of_philosophers)
+	while (i < len)
 	{
-		eating_count = data->philos[i].eating_count;
-		number_of_times_to_eat = data->value->number_of_times_to_eat;
-		if (eating_count < number_of_times_to_eat)
-			return (0);
+		pthread_mutex_destroy(&mtx_arr[i]);
 		i++;
 	}
-	return (1);
+	free(mtx_arr);
+}
+
+void	error_create_thread(t_data *data)
+{
+	printf("System error\n");
+	pthread_mutex_unlock(&data->id_mtx);
+	data->is_alive = 0;
+	return ;
+}
+
+void	*case_die(t_data *data, int id, int i)
+{
+	print_time(data, id, "died");
+	data->is_alive = 0;
+	while (i <= data->value->number_of_philosophers)
+		pthread_mutex_unlock(&data->forks[i++]);
+	pthread_mutex_unlock(&data->ph_mtx[id - 1]);
+	return (NULL);
 }
